@@ -14,6 +14,7 @@
 		0DE496B81B6114D6005E17FC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DE496B71B6114D6005E17FC /* Images.xcassets */; };
 		0DE496BB1B6114D6005E17FC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DE496B91B6114D6005E17FC /* LaunchScreen.xib */; };
 		0DE496C71B6114D6005E17FC /* QMCaptureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DE496C61B6114D6005E17FC /* QMCaptureTests.m */; };
+		0DE496D21B612FB7005E17FC /* IdiomData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DE496D11B612FB7005E17FC /* IdiomData.m */; };
 		779509BC2C3C8168A077CF66 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A8E3DA08E1F010FEB20B36 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,8 @@
 		0DE496C01B6114D6005E17FC /* QMCaptureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QMCaptureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DE496C51B6114D6005E17FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0DE496C61B6114D6005E17FC /* QMCaptureTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QMCaptureTests.m; sourceTree = "<group>"; };
+		0DE496D01B612FB7005E17FC /* IdiomData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdiomData.h; sourceTree = "<group>"; };
+		0DE496D11B612FB7005E17FC /* IdiomData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdiomData.m; sourceTree = "<group>"; };
 		69A8E3DA08E1F010FEB20B36 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BD6721B77A1AAEDECFEC819 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		DF10F9EFE7A8C67BC0AA9D83 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -92,6 +95,8 @@
 				0DE496AF1B6114D6005E17FC /* AppDelegate.m */,
 				0DE496B11B6114D6005E17FC /* ViewController.h */,
 				0DE496B21B6114D6005E17FC /* ViewController.m */,
+				0DE496D01B612FB7005E17FC /* IdiomData.h */,
+				0DE496D11B612FB7005E17FC /* IdiomData.m */,
 				0DE496B41B6114D6005E17FC /* Main.storyboard */,
 				0DE496B71B6114D6005E17FC /* Images.xcassets */,
 				0DE496B91B6114D6005E17FC /* LaunchScreen.xib */,
@@ -280,6 +285,7 @@
 			files = (
 				0DE496B31B6114D6005E17FC /* ViewController.m in Sources */,
 				0DE496B01B6114D6005E17FC /* AppDelegate.m in Sources */,
+				0DE496D21B612FB7005E17FC /* IdiomData.m in Sources */,
 				0DE496AD1B6114D6005E17FC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
