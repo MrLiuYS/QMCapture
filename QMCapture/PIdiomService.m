@@ -117,7 +117,16 @@
                             NSString * string = element.stringValue;
                             
                             string = [string substringToIndex:4];
+                            NSMutableArray * arr = [NSMutableArray array];
+                            for (int index = 0; index < string.length; index++) {
+                                [arr addObject:[string substringWithRange:NSMakeRange(index, 1)]];
+                            }
                             
+                            
+//                            NSArray * ar = [string componentsSeparatedByString:@""];
+//                            
+                            string = [arr componentsJoinedByString:@" "];
+//                            string = [string stringByReplacingOccurrencesOfString:@"" withString:@" "];
   
                             model.hanzi = string;
 
@@ -184,7 +193,7 @@
         
 //        PIdiom * m =  aArray[index];
         
-        [db executeUpdate:@"insert INTO idioms (chengyuId, hanzi , jieshi) VALUES (?,?,?)",[NSNumber numberWithInt:[PIdiomService sharedManager].location],m.hanzi,m.jieshi];
+        [db executeUpdate:@"insert INTO idioms (chengyuId, hanzi , jieshi,biaoji) VALUES (?,?,?,?)",[NSNumber numberWithInt:[PIdiomService sharedManager].location],m.hanzi,m.jieshi,@"0"];
         
         [PIdiomService sharedManager].location ++;
         
