@@ -21,8 +21,16 @@
     
     [super viewDidLoad];
     
-//    [IdiomData idiomList];
-    [PIdiomService idiomList];
+    [IdiomData idiomList:^(id aData, NSError *error) {
+        
+        NSLog(@"%@",aData);
+        
+        NSArray * array = [IdiomData readDB];
+        
+        NSLog(@"个数：%d",array.count);
+        
+    }];
+//    [PIdiomService idiomList];
 }
 
 

@@ -17,11 +17,11 @@
 
 @implementation IdiomData
 
-+ (void)idiomList {
++ (void)idiomList:(void (^)(id aData, NSError *error))block {
     
     NSMutableArray *mutableOperations = [NSMutableArray array];
-    
-    for (int index = 1; index < 458; index++) {
+//    458
+    for (int index = 1; index < 2; index++) {
         
         NSString * tempUrlStr  =  [NSString stringWithFormat:@"http://chengyu.supfree.net/small.asp?id=4&page=%d",index];
         
@@ -59,6 +59,13 @@
                                [SVProgressHUD showProgress:value status:[NSString stringWithFormat:@"%.2f%%",value*100] maskType:SVProgressHUDMaskTypeBlack] ;
                                
                                NSLog(@"%lu of %lu complete", numberOfFinishedOperations, totalNumberOfOperations);
+                               
+                               if (numberOfFinishedOperations == totalNumberOfOperations) {
+                                   
+                                    block(@"asdf",nil);
+                                   
+                               }
+                               
                                
                            } completionBlock:^(NSArray *operations) {
                                
@@ -156,6 +163,29 @@
     [db close];
 }
 
+
++ (NSArray *)readDB {
+    
+    NSMutableArray * array = [NSMutableArray array];
+    
+    FMDatabase * db = [self db];
+    
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM idiom "];
+    
+    while ([rs next]) {
+
+        Idiom * model = [Idiom new];
+        
+        model.href = [rs stringForColumn:@"href"];
+        model.title = [rs stringForColumn:@"title"];
+        
+        [array addObject:model];
+        
+    }
+    
+    return array;
+    
+}
 
 @end
 

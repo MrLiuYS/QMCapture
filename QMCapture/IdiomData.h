@@ -10,7 +10,10 @@
 
 @interface IdiomData : NSObject
 
-+ (void)idiomList;
++ (void)idiomList:(void (^)(id aData, NSError *error))block;
+
+
++ (NSArray *)readDB;
 
 @end
 
