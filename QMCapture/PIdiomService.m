@@ -1,29 +1,42 @@
 //
-//  IdiomData.m
+//  PIdiomService.m
 //  QMCapture
 //
-//  Created by 刘永生 on 15/7/23.
+//  Created by 刘永生 on 15/7/24.
 //  Copyright (c) 2015年 刘永生. All rights reserved.
 //
-/**
- *  成语
- */
-#import "IdiomData.h"
+
+#import "PIdiomService.h"
 
 #import <FMDB.h>
 #import <GDataXMLNode.h>
 #import <AFNetworking.h>
 #import <SVProgressHUD.h>
 
-@implementation IdiomData
+@implementation PIdiomService
+
++ (PIdiomService *)sharedManager
+{
+    static PIdiomService *sharedInstance = nil;
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^{
+        if (!sharedInstance) {
+            
+            sharedInstance = [[PIdiomService alloc]init];
+            
+        }
+    });
+    return sharedInstance;
+}
+
 
 + (void)idiomList {
     
     NSMutableArray *mutableOperations = [NSMutableArray array];
     
-    for (int index = 1; index < 458; index++) {
+    for (int index = 1; index < 21; index++) {
         
-        NSString * tempUrlStr  =  [NSString stringWithFormat:@"http://chengyu.supfree.net/small.asp?id=4&page=%d",index];
+        NSString * tempUrlStr  =  [NSString stringWithFormat:@"http://xiaoxue.hujiang.com/cyu/xiaoxuechengyu_%d/",index];
         
         NSURL *url3 = [NSURL URLWithString:tempUrlStr];
         
@@ -34,7 +47,7 @@
         [operation3 setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             
             
-            [IdiomData parseFengshuList:responseObject];
+            [self parseFengshuList:responseObject];
             
             NSLog(@"%@",operation.request.URL);
             //            NSLog(@"Response3: %@", [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding]);
@@ -77,11 +90,11 @@
     
     @autoreleasepool {
         GDataXMLDocument * doc = [[GDataXMLDocument alloc]initWithHTMLData:response
-                                                                  encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
+                                                                  encoding:NSUTF8StringEncoding
                                                                      error:NULL];
         if (doc) {
             
-            NSArray * trArray = [doc nodesForXPath:@"//div[@class='cdiv']" error:NULL];
+            NSArray * trArray = [doc nodesForXPath:@"//div[@class='list_content']" error:NULL];
             
             for (GDataXMLElement * item0 in trArray) {
                 
@@ -93,19 +106,36 @@
                     
                     for (GDataXMLElement * item2 in td) {
                         
+                        
+                        PIdiom * model = [PIdiom new];
+                        
+                        
                         NSArray * a = [item2  elementsForName:@"a"];
                         
                         for (GDataXMLElement * element in a) {
                             
-                            Idiom * model = [Idiom new];
+                            NSString * string = element.stringValue;
                             
-                            model.title = element.stringValue;
+                            string = [string substringToIndex:4];
                             
-                            model.href = [[element attributeForName:@"href"] stringValue];
-                            
-                            [mainArray addObject:model];
+  
+                            model.hanzi = string;
+
                             
                         }
+                        
+                        NSArray * div11 = [item2  elementsForName:@"div"];
+                        
+                        for (GDataXMLElement * element in div11) {
+                            
+                            model.jieshi = element.stringValue;
+                          
+                        }
+                        
+                        
+                        
+                        
+                        [mainArray addObject:model];
                     }
                 }
             }
@@ -118,6 +148,9 @@
     return mainArray;
     
 }
+
+
+
 
 #pragma mark - 数据库
 + (NSString *)FMDBPath {
@@ -135,7 +168,7 @@
     FMDatabase *_db = [FMDatabase databaseWithPath:[self FMDBPath]];
     if ([_db open]) {
         
-        [_db executeUpdate:@"CREATE TABLE IF NOT EXISTS idiom (href TEXT PRIMARY KEY, title TEXT)"];
+        [_db executeUpdate:@"CREATE TABLE IF NOT EXISTS idioms (chengyuId varchar PRIMARY KEY, hanzi varchar(16), jieshi text DEFAULT(NULL) , biaoji varchar DEFAULT(NULL))"];
     }
     
     return _db;
@@ -147,9 +180,13 @@
     
     [db beginTransaction];
     
-    for (Idiom * m in aArray) {
+    for (PIdiom * m in aArray) {
         
-        [db executeUpdate:@"REPLACE INTO idiom (href, title) VALUES (?,?)",m.href,m.title];
+//        PIdiom * m =  aArray[index];
+        
+        [db executeUpdate:@"insert INTO idioms (chengyuId, hanzi , jieshi) VALUES (?,?,?)",[NSNumber numberWithInt:[PIdiomService sharedManager].location],m.hanzi,m.jieshi];
+        
+        [PIdiomService sharedManager].location ++;
         
     }
     [db commit];
@@ -159,10 +196,9 @@
 
 @end
 
-@implementation Idiom
 
+@implementation PIdiom
 
 
 @end
-
 

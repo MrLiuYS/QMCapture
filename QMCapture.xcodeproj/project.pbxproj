@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0DA5BE721B61D5C1003238D6 /* PIdiomService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA5BE711B61D5C1003238D6 /* PIdiomService.m */; };
 		0DE496AD1B6114D6005E17FC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DE496AC1B6114D6005E17FC /* main.m */; };
 		0DE496B01B6114D6005E17FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DE496AF1B6114D6005E17FC /* AppDelegate.m */; };
 		0DE496B31B6114D6005E17FC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DE496B21B6114D6005E17FC /* ViewController.m */; };
@@ -29,6 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0DA5BE701B61D5C1003238D6 /* PIdiomService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIdiomService.h; sourceTree = "<group>"; };
+		0DA5BE711B61D5C1003238D6 /* PIdiomService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIdiomService.m; sourceTree = "<group>"; };
 		0DE496A71B6114D6005E17FC /* QMCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QMCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DE496AB1B6114D6005E17FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0DE496AC1B6114D6005E17FC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -97,6 +100,8 @@
 				0DE496B21B6114D6005E17FC /* ViewController.m */,
 				0DE496D01B612FB7005E17FC /* IdiomData.h */,
 				0DE496D11B612FB7005E17FC /* IdiomData.m */,
+				0DA5BE701B61D5C1003238D6 /* PIdiomService.h */,
+				0DA5BE711B61D5C1003238D6 /* PIdiomService.m */,
 				0DE496B41B6114D6005E17FC /* Main.storyboard */,
 				0DE496B71B6114D6005E17FC /* Images.xcassets */,
 				0DE496B91B6114D6005E17FC /* LaunchScreen.xib */,
@@ -285,6 +290,7 @@
 			files = (
 				0DE496B31B6114D6005E17FC /* ViewController.m in Sources */,
 				0DE496B01B6114D6005E17FC /* AppDelegate.m in Sources */,
+				0DA5BE721B61D5C1003238D6 /* PIdiomService.m in Sources */,
 				0DE496D21B612FB7005E17FC /* IdiomData.m in Sources */,
 				0DE496AD1B6114D6005E17FC /* main.m in Sources */,
 			);

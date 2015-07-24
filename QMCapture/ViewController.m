@@ -10,6 +10,8 @@
 
 #import "IdiomData.h"
 
+#import "PIdiomService.h"
+
 @interface ViewController ()
 
 @end
@@ -19,7 +21,8 @@
     
     [super viewDidLoad];
     
-    [IdiomData idiomList];
+//    [IdiomData idiomList];
+    [PIdiomService idiomList];
 }
 
 
