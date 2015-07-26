@@ -21,7 +21,7 @@
     
     NSMutableArray *mutableOperations = [NSMutableArray array];
 //    458
-    for (int index = 1; index < 2; index++) {
+    for (int index = 1; index < 460; index++) {
         
         NSString * tempUrlStr  =  [NSString stringWithFormat:@"http://chengyu.supfree.net/small.asp?id=4&page=%d",index];
         
@@ -56,7 +56,7 @@
                            {
                                
                                float value = (float)numberOfFinishedOperations/totalNumberOfOperations;
-                               [SVProgressHUD showProgress:value status:[NSString stringWithFormat:@"%.2f%%",value*100] maskType:SVProgressHUDMaskTypeBlack] ;
+                               [SVProgressHUD showProgress:value status:[NSString stringWithFormat:@"列表：%.2f%%",value*100] maskType:SVProgressHUDMaskTypeBlack] ;
                                
                                NSLog(@"%lu of %lu complete", numberOfFinishedOperations, totalNumberOfOperations);
                                
@@ -142,7 +142,7 @@
     FMDatabase *_db = [FMDatabase databaseWithPath:[self FMDBPath]];
     if ([_db open]) {
         
-        [_db executeUpdate:@"CREATE TABLE IF NOT EXISTS idiom (href TEXT PRIMARY KEY, title TEXT)"];
+        [_db executeUpdate:@"CREATE TABLE IF NOT EXISTS idiom (href TEXT PRIMARY KEY, title TEXT,info TEXT)"];
     }
     
     return _db;
@@ -170,7 +170,7 @@
     
     FMDatabase * db = [self db];
     
-    FMResultSet *rs = [db executeQuery:@"SELECT * FROM idiom "];
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM idiom WHERE info ISNULL"];
     
     while ([rs next]) {
 
@@ -186,6 +186,152 @@
     return array;
     
 }
+
+
++ (void)idiomInfos:(NSArray *)aInfos func:(void (^)(id aData, NSError *error))block {
+    
+    FMDatabase * db = [self db];
+    
+    [db beginTransaction];
+    
+    
+    
+    NSMutableArray *mutableOperations = [NSMutableArray array];
+    //    458
+    for (Idiom * model in aInfos) {
+        
+        NSString * tempUrlStr  =  [NSString stringWithFormat:@"http://chengyu.supfree.net/%@",model.href];
+        
+        NSURL *url3 = [NSURL URLWithString:tempUrlStr];
+        
+        NSURLRequest *request3 = [NSURLRequest requestWithURL:url3];
+        
+        AFHTTPRequestOperation *operation3 = [[AFHTTPRequestOperation alloc] initWithRequest:request3];
+        
+        [operation3 setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            
+            NSArray * infos = [IdiomData parseInfo:responseObject];
+            
+            [db executeUpdate:@"REPLACE INTO idiom (href, title,info) VALUES (?,?,?)",model.href,model.title,[infos componentsJoinedByString:@"_&*&_"]];
+            
+            
+            NSLog(@"%@",operation.request.URL);
+            //            NSLog(@"Response3: %@", [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding]);
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+            NSLog(@"Error: %@", error);
+            
+        }];
+        
+        [mutableOperations addObject:operation3];
+        
+    }
+    
+    [db commit];
+//    [db close];
+
+    
+    
+    NSArray *operations = [AFURLConnectionOperation batchOfRequestOperations:mutableOperations
+                                                               progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations)
+                           {
+                               
+                               float value = (float)numberOfFinishedOperations/totalNumberOfOperations;
+                               [SVProgressHUD showProgress:value status:[NSString stringWithFormat:@"获取详情：%.1f%%",value*100] maskType:SVProgressHUDMaskTypeBlack] ;
+                               
+                               NSLog(@"%lu of %lu complete", numberOfFinishedOperations, totalNumberOfOperations);
+                               
+                               if (numberOfFinishedOperations == totalNumberOfOperations) {
+                                   
+                                   block(@"asdf",nil);
+                                   
+                               }
+                               
+                               
+                           } completionBlock:^(NSArray *operations) {
+                               
+                               //                               NSLog(@"All operations in batch complete: %@",operations);
+                               
+                           }];
+    
+    [[NSOperationQueue mainQueue] addOperations:operations waitUntilFinished:NO];
+    
+    
+}
+
+
++ (NSArray *)parseInfo:(id)response {
+    
+    NSMutableArray * mainArray = [NSMutableArray array];
+    
+    @autoreleasepool {
+        GDataXMLDocument * doc = [[GDataXMLDocument alloc]initWithHTMLData:response
+                                                                  encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
+                                                                     error:NULL];
+        if (doc) {
+            
+            NSArray * trArray = [doc nodesForXPath:@"//table" error:NULL];
+            
+            for (GDataXMLElement * item0 in trArray) {
+                
+                NSArray * tr = [item0 elementsForName:@"tr"];
+                
+                
+                for (GDataXMLElement * item1 in tr) {
+                    
+                    NSArray * td = [item1 elementsForName:@"td"];
+                    
+//                    if (td.count == 2) {
+//                        
+//                        GDataXMLElement * tdelement0 = td[0];
+//                        
+//                        
+//                        GDataXMLElement * tdelement1 = td[1];
+//                        
+//                        
+//                    }
+                    
+                    for (GDataXMLElement * item2 in td) {
+                        
+//                        NSLog(@"%@",item2.stringValue);
+                        NSString * string = item2.stringValue;
+                        
+                        string = [string stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+                        string = [string stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                        
+                        [mainArray addObject:item2.stringValue];
+                        
+                        
+//                        NSArray * a = [item2  elementsForName:@"a"];
+//                        
+//                        for (GDataXMLElement * element in a) {
+//                            
+//                            Idiom * model = [Idiom new];
+//                            
+//                            model.title = element.stringValue;
+//                            
+//                            model.href = [[element attributeForName:@"href"] stringValue];
+//                            
+//                            [mainArray addObject:model];
+//                            
+//                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+//    [self insertArray:mainArray];
+    
+    return mainArray;
+    
+}
+
+
+
 
 @end
 

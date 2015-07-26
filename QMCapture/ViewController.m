@@ -20,17 +20,35 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+
     
-    [IdiomData idiomList:^(id aData, NSError *error) {
-        
-        NSLog(@"%@",aData);
-        
-        NSArray * array = [IdiomData readDB];
-        
-        NSLog(@"个数：%d",array.count);
+    
+    
+//    [IdiomData idiomList:^(id aData, NSError *error) {
+//        
+//        NSLog(@"%@",aData);
+//        
+//        NSArray * array = [IdiomData readDB];
+//        
+////        NSLog(@"个数：%d",(int)array.count);
+//        
+//        [IdiomData idiomInfos:array func:^(id aData, NSError *error) {
+//            
+//        }];
+//        
+//        
+//    }];
+
+    
+    NSArray * array = [IdiomData readDB];
+    
+      NSLog(@"个数：%d",(int)array.count);
+    
+    
+    [IdiomData idiomInfos:array func:^(id aData, NSError *error) {
         
     }];
-//    [PIdiomService idiomList];
+    
 }
 
 

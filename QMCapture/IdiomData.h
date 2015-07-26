@@ -15,6 +15,8 @@
 
 + (NSArray *)readDB;
 
++ (void)idiomInfos:(NSArray *)aInfos func:(void (^)(id aData, NSError *error))block ;
+
 @end
 
 
@@ -22,6 +24,8 @@
 
 @property (nonatomic, copy) NSString * href;
 @property (nonatomic, copy) NSString * title;
+
+@property (nonatomic, copy) NSString * info;
 
 
 @end
